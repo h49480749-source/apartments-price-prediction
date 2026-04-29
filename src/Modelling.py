@@ -1,5 +1,7 @@
 from sklearn.model_selection import train_test_split, cross_validate, KFold , cross_val_predict
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
+from sklearn.compose import ColumnTransformer, make_column_selector
+from sklearn.preprocessing import PolynomialFeatures, OneHotEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import r2_score, mean_squared_error
 import pandas as pd
@@ -9,6 +11,7 @@ import mlflow
 import joblib
 from pathlib import Path
 import logging
+import dagshub
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,19 +29,22 @@ def load_data(file_path):
 
 def modelling(data):
     try:
-        X = data.drop('price',axis=1)
+        X = data.drop(columns=['price','Posted_by'])
         y = data['price']
+        preprocessor = ColumnTransformer([
+            ("cat", OneHotEncoder(handle_unknown="ignore"),make_column_selector(dtype_include=object)),
+            ("num", "passthrough", make_column_selector(dtype_include=["int64", "float64"]))
+        ])
         dagshub.init(repo_owner='h49480749', repo_name='apartments-price-prediction', mlflow=True)
         mlflow.set_tracking_uri("https://dagshub.com/h49480749/apartments-price-prediction.mlflow")
-        mlflow.set_experiment("Real Estate Price Prediction")
+        mlflow.set_experiment("Apartments Price Prediction")
         splits = 3
         kf = KFold(shuffle=True, random_state=42, n_splits=splits)
         model = Pipeline([
-            ("xgb", Ridge(
-                alpha=9.0,
-                random_state=42
-            ))
-            ])
+            ("preprocessor", preprocessor),
+            ("poly", PolynomialFeatures(degree=2)),
+            ("lr", Ridge(alpha=9))
+        ])
         with mlflow.start_run(run_name='Ridge Regression'):
             
             y_pred = cross_val_predict(model,X,y, cv=kf)
