@@ -16,3 +16,6 @@ jobs:
 
       - name: test 2
         run: echo "Hello World"
+
+      - name: test 3
+        run: echo "Hello World"
