@@ -41,7 +41,7 @@ def clean_data(data):
         logger.error(f"Error during data cleaning: {e}")
         raise e
 if __name__ == "__main__":
-    data_file_path = Path('data/Apartments.csv')
+    data_file_path = Path('data/data.csv')
     data = load_data(data_file_path)
     clean_data(data)
 

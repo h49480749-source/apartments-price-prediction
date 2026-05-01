@@ -12,6 +12,10 @@ import joblib
 from pathlib import Path
 import logging
 import dagshub
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
@@ -36,7 +40,7 @@ def modelling(data):
             ("num", "passthrough", make_column_selector(dtype_include=["int64", "float64"]))
         ])
         dagshub.init(repo_owner='h49480749', repo_name='apartments-price-prediction', mlflow=True)
-        mlflow.set_tracking_uri("https://dagshub.com/h49480749/apartments-price-prediction.mlflow")
+        mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
         mlflow.set_experiment("Apartments Price Prediction")
         splits = 3
         kf = KFold(shuffle=True, random_state=42, n_splits=splits)
