@@ -15,3 +15,5 @@ mlflow
 dvc
 pytest
 streamlit
+dagshub
+python-dotenv
