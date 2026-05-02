@@ -56,6 +56,6 @@ jobs:
 
       - name: Build and push to ECR
         run: |
-          docker build -t apartments-api .
-          docker tag apartments-api:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/apartments-price-api:latest
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/apartments-price-prediction:latest
+          IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/apartments-price-prediction:latest
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
