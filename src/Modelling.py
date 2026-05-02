@@ -8,7 +8,6 @@ import pandas as pd
 import numpy as np
 from xgboost import XGBRegressor
 import mlflow
-import joblib
 from pathlib import Path
 import logging
 import dagshub
@@ -63,23 +62,24 @@ def modelling(data):
                 registered_model_name="apartments-price-model"
             )        
             model.fit(X,y)
-        joblib.dump(model, 'models/model.pkl')
         logger.info("Model building and saving completed successfully")
     except Exception as e:
         logger.error(f"Error during model building: {e}")
         raise e
     
-def promote_model_to_production(model_name, model_version):
+def promote_model_to_production(model_name):
     client = MlflowClient()
+    versions = client.search_model_versions(f"name='{model_name}'")
+    latest_version = max(int(v.version) for v in versions)
     client.transition_model_version_stage(
         name=model_name,
-        version=model_version,
+        version=latest_version,
         stage="Production"
     )
-    logger.info(f"Model {model_name} version {model_version} promoted to Production stage")
+    logger.info(f"Model {model_name} version {latest_version} promoted to Production stage")
 
 if __name__ == "__main__":
     data_file_path = Path('data/Cleaned_Data.csv')
     data = load_data(data_file_path)
     modelling(data)
-    promote_model_to_production("apartments-price-model", 1)
+    promote_model_to_production("apartments-price-model")
