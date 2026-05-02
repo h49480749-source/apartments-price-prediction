@@ -40,7 +40,6 @@ def modelling(data):
             ("cat", OneHotEncoder(handle_unknown="ignore"),make_column_selector(dtype_include=object)),
             ("num", "passthrough", make_column_selector(dtype_include=["int64", "float64"]))
         ])
-        dagshub.init(repo_owner='h49480749', repo_name='apartments-price-prediction', mlflow=True)
         mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
         mlflow.set_experiment("Apartments Price Prediction")
         splits = 3
