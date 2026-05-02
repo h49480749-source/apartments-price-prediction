@@ -3,9 +3,16 @@ from pydantic import BaseModel
 import numpy as np
 import pandas as pd
 import joblib
+import mlflow.pyfunc
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI(title="Apartments Price Prediction API", version="1.0")
-model = joblib.load("../../models/model.pkl")
+mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI"))
+model = mlflow.pyfunc.load_model(
+    model_uri="models:/apartments-price-model/Production"
+)
 
 class ApartmentFeatures(BaseModel):
     Area: float

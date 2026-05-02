@@ -1,7 +1,11 @@
 numpy
-joblib
+pandas
 pydantic
 fastapi
 uvicorn
 scikit-learn
 xgboost
+dagshub
+python-dotenv
+mlflow
+pytest

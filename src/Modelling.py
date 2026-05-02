@@ -14,6 +14,7 @@ import logging
 import dagshub
 from dotenv import load_dotenv
 import os
+from mlflow.tracking import MlflowClient
 
 load_dotenv()
 
@@ -57,15 +58,29 @@ def modelling(data):
             mlflow.log_param("Cross_validation_splits", splits)
             mlflow.log_param("alpha", 9.0)
             mlflow.log_metric('r2_score', score)
-            mlflow.sklearn.log_model(sk_model=model, artifact_path="Ridge_regression_model")        
+            mlflow.sklearn.log_model(
+                sk_model=model,
+                artifact_path="model",
+                registered_model_name="apartments-price-model"
+            )        
             model.fit(X,y)
         joblib.dump(model, 'models/model.pkl')
         logger.info("Model building and saving completed successfully")
     except Exception as e:
         logger.error(f"Error during model building: {e}")
         raise e
+    
+def promote_model_to_production(model_name, model_version):
+    client = MlflowClient()
+    client.transition_model_version_stage(
+        name=model_name,
+        version=model_version,
+        stage="Production"
+    )
+    logger.info(f"Model {model_name} version {model_version} promoted to Production stage")
 
 if __name__ == "__main__":
     data_file_path = Path('data/Cleaned_Data.csv')
     data = load_data(data_file_path)
     modelling(data)
+    promote_model_to_production("apartments-price-model", 1)
