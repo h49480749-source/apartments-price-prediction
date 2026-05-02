@@ -61,7 +61,6 @@ def modelling(data):
                 artifact_path="model",
                 registered_model_name="apartments-price-model"
             )        
-            model.fit(X,y)
         logger.info("Model building and saving completed successfully")
     except Exception as e:
         logger.error(f"Error during model building: {e}")
