@@ -12,5 +12,6 @@ jupyter
 fastapi
 uvicorn
 mlflow
+dvc
 pytest
 streamlit

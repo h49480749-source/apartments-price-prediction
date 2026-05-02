@@ -21,6 +21,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name : Configure dagshub dvc remote
+        run: |
+          dvc remote add origin https://dagshub.com/h49480749/apartments-price-prediction.dvc
+          dvc remote modify origin --local auth basic
+          dvc remote modify origin --local user ${{ secrets.DAGSHUB_USERNAME }}
+          dvc remote modify origin --local password ${{ secrets.DAGSHUB_TOKEN }}
+      - name : Pull data from DVC remote
+        run: |
+          dvc pull -r origin
       - name : Run data preprocessing
         run: |
           python src/Data_Cleaning.py
