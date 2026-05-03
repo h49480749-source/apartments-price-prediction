@@ -85,5 +85,3 @@ After collecting the data, the following steps were performed:
 🎯 Final model achieves:
 
 > 🟢 **78% Accuracy**
-
----
