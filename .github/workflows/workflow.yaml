@@ -59,3 +59,11 @@ jobs:
           IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/apartments-price-prediction:latest
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
+
+      - name: Update AWS ECS
+        run: |
+          aws ecs update-service \
+          --cluster apartments-prediction-cluster \ 
+          --service apartments-prediction-service \
+          --force-new-deployment \
+          --region ${{ secrets.AWS_REGION }} 
