@@ -1,7 +1,3 @@
-Here’s your README with cleaner styling, symbols, and a more polished visual flow—without changing your content:
-
----
-
 # 🏢 **Apartments Price Prediction**
 
 ✨ This project demonstrates a **real-world Machine Learning system** — starting from **raw data collection** all the way to **production deployment**.
