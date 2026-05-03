@@ -1,6 +1,6 @@
 # 🏢 **Apartments Price Prediction**
 
-✨ This project demonstrates a **real-world Machine Learning system** — starting from **raw data collection** all the way to **production deployment**.
+✨ This project demonstrates a **real-world Machine Learning system** starting from **raw data collection** all the way to **production deployment**.
 
 🎯 **Goal:**
 Provide customers interested in apartments in **5th Settlement** with clear insights into:
